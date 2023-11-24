@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;300;400;500;600;700&display=swap");
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: "Work Sans", sans-serif;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.9);
+  background-color: #f1f1f1;
+}
+
+.main-container {
+  max-width: 600px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background-color: white;
+}
+
+.desafios {
+  padding: 12px;
+}
+.banner {
+  background-image: url(./images/banner.jpg);
+  background-size: cover;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 300;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  color: black;
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin: 1rem 0 0.2rem 0;
+  padding: 0;
+}
+
+.console {
+  color: #98c379;
+  background-color: #15222e;
+  font-family: "Courier New", monospace;
+  padding: 12px;
+}
+
+/*Estilos de las listas descriptivas*/
+.description-lists h2 {
+  color: rgb(75, 75, 75);
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0;
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+dl {
+  display: flex;
+  flex-flow: row wrap;
+  border: solid black;
+  border-width: 1px;
+}
+dt {
+  flex-basis: 30%;
+  padding: 4px;
+  background: rgb(51, 33, 116);
+  text-align: left;
+  color: #fff;
+  border-bottom: 1px solid #333;
+}
+dd {
+  flex-basis: 60%;
+  flex-grow: 1;
+  margin: 0;
+  padding: 4px;
+  border-bottom: 1px solid #333;
+}
+
+.aviso {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+}
+.aviso .info {
+  height: 20px;
+  width: 20px;
+  background-color: #283762;
+  color: white;
+  border-radius: 50%;
+  display: inline-block;
+  padding: 2px;
+  font-size: 1rem;
+  text-align: center;
+  margin-right: 8px;
+}
+.hidden {
+  display: none;
+}
+.visible {
+  display: flex !important;
+}
