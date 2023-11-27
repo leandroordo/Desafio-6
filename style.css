@@ -44,9 +44,17 @@ h1 {
 
 h2 {
   color: black;
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 1.5rem 0 0.3rem 0;
+  padding: 0;
+}
+
+h3 {
+  color: rgb(42, 42, 42);
   font-size: 1.2rem;
   font-weight: 400;
-  margin: 1rem 0 0.2rem 0;
+  margin: 0.5rem 0;
   padding: 0;
 }
 
@@ -110,4 +118,58 @@ dd {
 }
 .visible {
   display: flex !important;
+}
+
+/*Estilos para el form*/
+.formLine {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.formField {
+  flex-grow: 1;
+  margin-bottom: 0.8rem;
+}
+
+.formField label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 400;
+  padding: 0;
+}
+
+.formField input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 5px;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 1px solid #cccccc;
+  background-color: #ffffff;
+  color: #000000;
+  outline: none;
+}
+
+.formLine input[type="button"] {
+  background: linear-gradient(to bottom, #435893 5%, #283762 100%);
+  background-color: #283762;
+  border-radius: 6px;
+  border: 1px solid #051239;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 6px 0;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px -1px 0px #5b6178;
+}
+.formLine input[type="button"]:hover {
+  background: linear-gradient(to bottom, #283762 5%, #435893 100%);
+  background-color: #283762;
+}
+.formLine input[type="button"]:active {
+  position: relative;
+  top: 1px;
 }

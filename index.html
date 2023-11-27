@@ -57,6 +57,78 @@
           </div>
           <span>Hay concidencias en los apellidos de los integrantes</span>
         </div>
+        <section>
+          <h2>Bonus</h2>
+          <form>
+            <div class="formContainer">
+              <h3>Primer integrante</h3>
+              <div class="formSection">
+                <div class="formLine">
+                  <div class="formField">
+                    <label for="integrante1nombre1">Primer nombre *</label>
+                    <input id="integrante1nombre1" required value="" />
+                  </div>
+                  <div class="formField">
+                    <label for="integrante1nombre2">Segundo nombre</label>
+                    <input id="integrante1nombre2" value="" />
+                  </div>
+                </div>
+
+                <div class="formLine">
+                  <div class="formField">
+                    <label for="integrante1apellido1">Primer apellido *</label>
+                    <input id="integrante1apellido1" required value="" />
+                  </div>
+                  <div class="formField">
+                    <label for="integrante1apellido2">Segundo apellido</label>
+                    <input id="integrante1apellido2" value="" />
+                  </div>
+                </div>
+                <div id="integrante1-form" class="console"></div>
+                <div class="formLine">
+                  <input
+                    type="button"
+                    value="Completar"
+                    onclick="setIntegrante(0)"
+                  />
+                </div>
+              </div>
+
+              <h3>Segundo integrante</h3>
+              <div class="formSection">
+                <div class="formLine">
+                  <div class="formField">
+                    <label for="integrante2nombre1">Primer nombre *</label>
+                    <input id="integrante2nombre1" required value="" />
+                  </div>
+                  <div class="formField">
+                    <label for="integrante2nombre2">Segundo nombre</label>
+                    <input id="integrante2nombre2" value="" />
+                  </div>
+                </div>
+
+                <div class="formLine">
+                  <div class="formField">
+                    <label for="integrante2apellido1">Primer apellido *</label>
+                    <input id="integrante2apellido1" required value="" />
+                  </div>
+                  <div class="formField">
+                    <label for="integrante2apellido2">Segundo apellido</label>
+                    <input id="integrante2apellido2" value="" />
+                  </div>
+                </div>
+                <div id="integrante2-form" class="console"></div>
+                <div class="formLine">
+                  <input
+                    type="button"
+                    value="Completar"
+                    onclick="setIntegrante(1)"
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
       </div>
     </div>
     <script src="js/main.js"></script>

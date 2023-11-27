@@ -1,3 +1,5 @@
+const integrantesForm = [,];
+
 function main() {
   //Mostrar el título del documento
   const pageTitleDiv = document.getElementById("page-title");
@@ -47,7 +49,7 @@ function procesarIntegrantes(outputDiv1, outputDiv2) {
 
   //Informar en la consola los nombres completos de cada integrante.
   //Debe utilizarse un único llamado a console.log para generar los 4 (2!) renglones
-  const result = `Integrante 1: ${primerIntegrante}\nIntegrante 2: ${segundoIntegrante}`;
+  const result = `Integrante 1: "${primerIntegrante}"\nIntegrante 2: "${segundoIntegrante}"`;
   console.log(result);
 
   return integrantes;
@@ -249,6 +251,95 @@ function destacarLista(containerDiv, valor, color) {
         childIndex++;
       }
     }
+  }
+}
+
+//Click del botón agregar datos del integrante 1
+function setIntegrante(index) {
+  const integranteNro = index + 1;
+
+  const primerNombre = document.getElementById(
+    `integrante${integranteNro}nombre1`
+  ).value;
+  const segundoNombre = document.getElementById(
+    `integrante${integranteNro}nombre2`
+  ).value;
+  const primerApellido = document.getElementById(
+    `integrante${integranteNro}apellido1`
+  ).value;
+  const segundoApellido = document.getElementById(
+    `integrante${integranteNro}apellido2`
+  ).value;
+
+  //Valido los datos obligatorios
+  if (!primerNombre) {
+    window.alert("El primer nombre es obligatorio.");
+    return;
+  }
+  if (!primerApellido) {
+    window.alert("El primer apellido es obligatorio.");
+    return;
+  }
+
+  //Agregar los datos del integrante al array de integrantes
+  const integrante = {
+    primerNombre,
+    segundoNombre,
+    primerApellido,
+    segundoApellido,
+  };
+  integrantesForm[index] = integrante;
+
+  //Leer los datos definidos en el form
+  const outputDiv = document.getElementById(`integrante${integranteNro}-form`);
+  const datosIntegrante = getDatosIntegrante(integrante);
+  outputDiv.innerHTML = datosIntegrante;
+
+  if (integrantesForm[0] && integrantesForm[1]) {
+    debugger;
+    procesarIntegrantesForm(integrantesForm);
+  }
+}
+
+function procesarIntegrantesForm(integrantes) {
+  /*La generación del string con el nombre completo que se mostrará en consola del integrante
+  no debe repetirse, sino lograr que una función lo lleve a cabo y simplemente
+  llamarla una vez para cada integrante*/
+  const primerIntegrante = getDatosIntegrante(integrantes[0]);
+  const segundoIntegrante = getDatosIntegrante(integrantes[1]);
+
+  //Informar en la consola los nombres completos de cada integrante.
+  //Debe utilizarse un único llamado a console.log para generar los 4 (2!) renglones
+  const result = `Integrante 1: "${primerIntegrante}"\nIntegrante 2: "${segundoIntegrante}"`;
+  console.log(result);
+
+  return integrantes;
+}
+
+function coincidenciaNombresForm(integrantes) {
+  //Ver si coinciden los nombres
+  const coincidencias = datosCoinciden(
+    integrantes[0].primerNombre,
+    integrantes[0].segundoNombre,
+    integrantes[1].primerNombre,
+    integrantes[1].segundoNombre
+  );
+  if (coincidencias.coincidencia) {
+    //Encontramos una coincidencia
+    //Avisar de la coincidencia y pedir un color
+    color = notificarCoincidencia("N", coincidencias.valor);
+    if (color) {
+      var listContainer = document.getElementById("description-lists");
+      destacarLista(listContainer, coincidencias.valor, color);
+    }
+  } else {
+    document.getElementById("aviso-coincidencia-nombres").className =
+      "aviso hidden";
+
+    //Si, en cambio, no hay coincidencias, informar en la consola que no las hubo.
+    console.log(
+      "Lo siento, pero no hubo concidencias en los nombres de los integrantes."
+    );
   }
 }
 
