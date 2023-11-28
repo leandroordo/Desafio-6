@@ -8,22 +8,13 @@ function main() {
   //Leer con JS, ni bien se cargue la página, los datos definidos en el HTML
   const primerIntegranteDiv = document.getElementById("primer-integrante");
   const segundoIntegranteDiv = document.getElementById("segundo-integrante");
-  const integrantes = procesarIntegrantes(
+  const integrantes = procesarIntegrantesList(
     primerIntegranteDiv,
     segundoIntegranteDiv
   );
 
-  //Analizar coincidencias en los nombres
-  //Ver si los nombres cargados en el HTML coinciden en algún caso
-  coincidenciaNombres(integrantes);
-
-  //Consultar a través de un confirm si se desea comparar los apellidos
-  //En caso contrario no tomar ninguna acción
-  if (window.confirm("¿Desea comparar también los apellidos?")) {
-    //Rrealizar la comparación de apellidos, con el mismo criterio que con los nombres
-    //y realizar las mismas acciones
-    coincidenciaApellidos(integrantes);
-  }
+  //Revisar y procesar las coincidencias de nombres y, opcionalmente, las de apellidos
+  procesarCoincidenciasList(integrantes);
 }
 
 function displayTitle(outputDiv) {
@@ -33,7 +24,7 @@ function displayTitle(outputDiv) {
   outputDiv.innerHTML = title;
 }
 
-function procesarIntegrantes(outputDiv1, outputDiv2) {
+function procesarIntegrantesList(outputDiv1, outputDiv2) {
   //Obtener los datos de las listas
   var listContainer = document.getElementById("description-lists");
   var integrantes = getIntegrantes(listContainer);
@@ -47,10 +38,7 @@ function procesarIntegrantes(outputDiv1, outputDiv2) {
   outputDiv1.innerHTML = primerIntegrante;
   outputDiv2.innerHTML = segundoIntegrante;
 
-  //Informar en la consola los nombres completos de cada integrante.
-  //Debe utilizarse un único llamado a console.log para generar los 4 (2!) renglones
-  const result = `Integrante 1: "${primerIntegrante}"\nIntegrante 2: "${segundoIntegrante}"`;
-  console.log(result);
+  loguearIntegrantes(primerIntegrante, segundoIntegrante);
 
   return integrantes;
 }
@@ -140,56 +128,92 @@ function getDatosIntegrante(integrante) {
   return nombreCompleto.trim();
 }
 
-function coincidenciaNombres(integrantes) {
-  //Ver si coinciden los nombres
-  const coincidencias = datosCoinciden(
-    integrantes[0].primerNombre,
-    integrantes[0].segundoNombre,
-    integrantes[1].primerNombre,
-    integrantes[1].segundoNombre
-  );
-  if (coincidencias.coincidencia) {
-    //Encontramos una coincidencia
-    //Avisar de la coincidencia y pedir un color
-    color = notificarCoincidencia("N", coincidencias.valor);
-    if (color) {
-      var listContainer = document.getElementById("description-lists");
-      destacarLista(listContainer, coincidencias.valor, color);
-    }
-  } else {
-    document.getElementById("aviso-coincidencia-nombres").className =
-      "aviso hidden";
+function loguearIntegrantes(primerIntegrante, segundoIntegrante) {
+  //Informar en la consola los nombres completos de cada integrante.
+  //Debe utilizarse un único llamado a console.log para generar los 4 (2!) renglones
 
-    //Si, en cambio, no hay coincidencias, informar en la consola que no las hubo.
-    console.log(
-      "Lo siento, pero no hubo concidencias en los nombres de los integrantes."
-    );
+  const result = `Integrante 1: "${primerIntegrante}"\nIntegrante 2: "${segundoIntegrante}"`;
+  console.log(result);
+}
+
+function procesarCoincidenciasList(integrantes) {
+  //Analizar coincidencias en los nombres
+  //Ver si los nombres cargados en el HTML coinciden en algún caso
+  coincidenciaNombresApellidos(integrantes, {
+    nombre: true,
+    list: true,
+    outputDiv: "aviso-coincidencia-list-nombres",
+    notificationVisibleStyle: "aviso visible",
+    notificationHiddenStyle: "aviso hidden",
+    listName: "description-lists",
+  });
+
+  //Consultar a través de un confirm si se desea comparar los apellidos
+  //En caso contrario no tomar ninguna acción
+  if (window.confirm("¿Desea comparar también los apellidos?")) {
+    //Realizar la comparación de apellidos, con el mismo criterio que con los nombres
+    //y realizar las mismas acciones
+    coincidenciaNombresApellidos(integrantes, {
+      nombre: false,
+      list: true,
+      outputDiv: "aviso-coincidencia-list-apellidos",
+      notificationVisibleStyle: "aviso visible",
+      notificationHiddenStyle: "aviso hidden",
+      listName: "description-lists",
+    });
   }
 }
 
-function coincidenciaApellidos(integrantes) {
-  //Ver si coinciden los apellidos
-  const coincidencias = datosCoinciden(
-    integrantes[0].primerApellido,
-    integrantes[0].segundoApellido,
-    integrantes[1].primerApellido,
-    integrantes[1].segundoApellido
-  );
+function coincidenciaNombresApellidos(integrantes, configDestino) {
+  //Ver si coinciden los nombres o apellidos
+  let coincidencias;
+  var formContainer = document.getElementById(configDestino.formName);
+
+  if (configDestino.nombre) {
+    coincidencias = datosCoinciden(
+      integrantes[0].primerNombre,
+      integrantes[0].segundoNombre,
+      integrantes[1].primerNombre,
+      integrantes[1].segundoNombre
+    );
+  } else {
+    coincidencias = datosCoinciden(
+      integrantes[0].primerApellido,
+      integrantes[0].segundoApellido,
+      integrantes[1].primerApellido,
+      integrantes[1].segundoApellido
+    );
+  }
+
   if (coincidencias.coincidencia) {
     //Encontramos una coincidencia
     //Avisar de la coincidencia y pedir un color
-    color = notificarCoincidencia("A", coincidencias.valor);
+    color = notificarCoincidencia(coincidencias.valor, configDestino);
     if (color) {
-      var listContainer = document.getElementById("description-lists");
-      destacarLista(listContainer, coincidencias.valor, color);
+      if (configDestino.list) {
+        //Mostrar coincidencia en la lista de integrantes
+        var listContainer = document.getElementById(configDestino.listName);
+        destacarLista(listContainer, coincidencias.valor, color);
+      } else {
+        //Mostrar coincidencia en el form
+        destacarFormElements(
+          formContainer,
+          coincidencias.valor,
+          color,
+          configDestino.nombre ? "nombre" : "apellido"
+        );
+      }
     }
   } else {
-    document.getElementById("aviso-coincidencia-apellidos").className =
-      "aviso hidden";
+    //No hubo ninguna coincidencia
+    document.getElementById(configDestino.outputDiv).className =
+      configDestino.notificationHiddenStyle;
 
     //Si, en cambio, no hay coincidencias, informar en la consola que no las hubo.
     console.log(
-      "Lo siento, pero no hubo concidencias en los apellidos de los integrantes."
+      `Lo siento, pero no hubo ninguna coincidencia en los ${
+        nombre ? "nombres" : "apellidos"
+      } de los integrantes.`
     );
   }
 }
@@ -208,10 +232,11 @@ function datosCoinciden(n1, n2, n3, n4) {
     };
 }
 
-function notificarCoincidencia(tipo, valorRepetido) {
-  const nombresOApellidos = tipo === "N" ? "nombres" : "apellidos";
-  document.getElementById(`aviso-coincidencia-${nombresOApellidos}`).className =
-    "aviso visible";
+function notificarCoincidencia(valorRepetido, configDestino) {
+  const nombresOApellidos = configDestino.nombre ? "nombres" : "apellidos";
+
+  document.getElementById(configDestino.outputDiv).className =
+    configDestino.notificationVisibleStyle;
 
   //Informar en la consola que hubo coincidencias
   console.log(
@@ -254,7 +279,31 @@ function destacarLista(containerDiv, valor, color) {
   }
 }
 
-//Click del botón agregar datos del integrante 1
+function resetFormElements(formContainer) {
+  //Buscar todos los inputs del form
+  const inputs = formContainer.getElementsByTagName("input");
+
+  for (index = 0; index < inputs.length; ++index) {
+    inputs[index].style.color = "";
+    inputs[index].style.border = "";
+  }
+}
+
+function destacarFormElements(formContainer, valor, color, type) {
+  //Buscar todos los inputs del form
+  const inputs = formContainer.getElementsByTagName("input");
+
+  for (index = 0; index < inputs.length; ++index) {
+    if (inputs[index].id.includes(type) && inputs[index].value === valor) {
+      inputs[index].style.color = color;
+      inputs[index].style.border = `solid 1px ${color}`;
+    }
+  }
+}
+
+//Click del botón agregar datos de un integrante, según el index
+//index == 0: integrante 1
+//index == 1: integrante 2
 function setIntegrante(index) {
   const integranteNro = index + 1;
 
@@ -296,7 +345,6 @@ function setIntegrante(index) {
   outputDiv.innerHTML = datosIntegrante;
 
   if (integrantesForm[0] && integrantesForm[1]) {
-    debugger;
     procesarIntegrantesForm(integrantesForm);
   }
 }
@@ -308,38 +356,41 @@ function procesarIntegrantesForm(integrantes) {
   const primerIntegrante = getDatosIntegrante(integrantes[0]);
   const segundoIntegrante = getDatosIntegrante(integrantes[1]);
 
-  //Informar en la consola los nombres completos de cada integrante.
-  //Debe utilizarse un único llamado a console.log para generar los 4 (2!) renglones
-  const result = `Integrante 1: "${primerIntegrante}"\nIntegrante 2: "${segundoIntegrante}"`;
-  console.log(result);
+  loguearIntegrantes(primerIntegrante, segundoIntegrante);
 
-  return integrantes;
+  //Revisar y procesar las coincidencias de nombres y, opcionalmente, las de apellidos
+  procesarCoincidenciasForm(integrantes);
 }
 
-function coincidenciaNombresForm(integrantes) {
-  //Ver si coinciden los nombres
-  const coincidencias = datosCoinciden(
-    integrantes[0].primerNombre,
-    integrantes[0].segundoNombre,
-    integrantes[1].primerNombre,
-    integrantes[1].segundoNombre
-  );
-  if (coincidencias.coincidencia) {
-    //Encontramos una coincidencia
-    //Avisar de la coincidencia y pedir un color
-    color = notificarCoincidencia("N", coincidencias.valor);
-    if (color) {
-      var listContainer = document.getElementById("description-lists");
-      destacarLista(listContainer, coincidencias.valor, color);
-    }
-  } else {
-    document.getElementById("aviso-coincidencia-nombres").className =
-      "aviso hidden";
+function procesarCoincidenciasForm(integrantes) {
+  //Analizar coincidencias en los nombres
+  //Primero resetear el formato de los controles del form
+  var formContainer = document.getElementById("formIntegrantes");
+  resetFormElements(formContainer);
 
-    //Si, en cambio, no hay coincidencias, informar en la consola que no las hubo.
-    console.log(
-      "Lo siento, pero no hubo concidencias en los nombres de los integrantes."
-    );
+  //Ver si los nombres cargados en el form coinciden en algún caso
+  coincidenciaNombresApellidos(integrantes, {
+    nombre: true,
+    list: false,
+    outputDiv: "aviso-coincidencia-form-nombres",
+    notificationVisibleStyle: "aviso visible",
+    notificationHiddenStyle: "aviso hidden",
+    formName: "formIntegrantes",
+  });
+
+  //Consultar a través de un confirm si se desea comparar los apellidos
+  //En caso contrario no tomar ninguna acción
+  if (window.confirm("¿Desea comparar también los apellidos?")) {
+    //Rrealizar la comparación de apellidos, con el mismo criterio que con los nombres
+    //y realizar las mismas acciones
+    coincidenciaNombresApellidos(integrantes, {
+      nombre: false,
+      list: false,
+      outputDiv: "aviso-coincidencia-form-apellidos",
+      notificationVisibleStyle: "aviso visible",
+      notificationHiddenStyle: "aviso hidden",
+      formName: "formIntegrantes",
+    });
   }
 }
 

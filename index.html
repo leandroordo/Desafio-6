@@ -45,13 +45,13 @@
         <div id="primer-integrante" class="console"></div>
         <h2>Segundo integrante:</h2>
         <div id="segundo-integrante" class="console"></div>
-        <div id="aviso-coincidencia-nombres" class="aviso hidden">
+        <div id="aviso-coincidencia-list-nombres" class="aviso hidden">
           <div class="info">
             <div>ℹ️</div>
           </div>
           <span>Hay concidencias en los nombres de los integrantes</span>
         </div>
-        <div id="aviso-coincidencia-apellidos" class="aviso hidden">
+        <div id="aviso-coincidencia-list-apellidos" class="aviso hidden">
           <div class="info">
             <div>ℹ️</div>
           </div>
@@ -60,7 +60,7 @@
         <section>
           <h2>Bonus</h2>
           <form>
-            <div class="formContainer">
+            <div class="formContainer" id="formIntegrantes">
               <h3>Primer integrante</h3>
               <div class="formSection">
                 <div class="formLine">
@@ -125,6 +125,20 @@
                     onclick="setIntegrante(1)"
                   />
                 </div>
+              </div>
+              <div id="aviso-coincidencia-form-nombres" class="aviso hidden">
+                <div class="info">
+                  <div>ℹ️</div>
+                </div>
+                <span>Hay concidencias en los nombres de los integrantes</span>
+              </div>
+              <div id="aviso-coincidencia-form-apellidos" class="aviso hidden">
+                <div class="info">
+                  <div>ℹ️</div>
+                </div>
+                <span
+                  >Hay concidencias en los apellidos de los integrantes</span
+                >
               </div>
             </div>
           </form>
